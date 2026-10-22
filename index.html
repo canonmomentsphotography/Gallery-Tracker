@@ -385,7 +385,6 @@
       document.getElementById('clientName').innerText = data.name || "Client";
       document.getElementById('sessionType').innerText = data.session || "Photography Session";
 
-      // Handle raw date values or date strings cleanly
       let deliveryText = data.estDelivery;
       if (typeof deliveryText === 'string' && deliveryText.includes('T')) {
         deliveryText = deliveryText.split('T')[0];
