@@ -281,7 +281,7 @@
     <div class="search-card">
       <label for="searchInput">Enter Your Email Address</label>
       <div class="search-box">
-        <input type="text" id="searchInput" class="search-input" placeholder="e.g. client@gmail.com" onkeypress="handleKeyPress(event)">
+        <input type="text" id="searchInput" class="search-input" placeholder="e.g. test@gmail.com" onkeypress="handleKeyPress(event)">
         <button class="btn" onclick="checkStatus()">Search Progress</button>
       </div>
       <div id="loader" class="loader">Fetching status...</div>
@@ -335,7 +335,7 @@
   </div>
 
   <script>
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz4quOlhuJzmumOyEBU4HWccghdv4GniJRanNIxapwA6glHlH2h0pCLbg1-lsmQ5GWg/exec";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOGZKUTzD_BR1XbU5tkJAlWkfyqR2iQeYr-k6_flz9es6yfutJoNSswNIPupPZLZYZ/exec";
 
     function handleKeyPress(e) {
       if (e.key === 'Enter') {
@@ -384,7 +384,14 @@
     function renderOrderData(data) {
       document.getElementById('clientName').innerText = data.name || "Client";
       document.getElementById('sessionType').innerText = data.session || "Photography Session";
-      document.getElementById('estDelivery').innerText = data.estDelivery || "TBD";
+
+      // Handle raw date values or date strings cleanly
+      let deliveryText = data.estDelivery;
+      if (typeof deliveryText === 'string' && deliveryText.includes('T')) {
+        deliveryText = deliveryText.split('T')[0];
+      }
+      document.getElementById('estDelivery').innerText = deliveryText || "TBD";
+      
       document.getElementById('studioNote').innerText = data.note || "No specific notes at this time.";
 
       updateTrackerVisuals(data.stage || 1);
@@ -394,4 +401,19 @@
       const stageNames = ["Queued", "Photo Selection", "Color Grading", "Detail Retouching", "Ready for Delivery"];
       document.getElementById('currentStageBadge').innerText = stageNames[stage - 1] || "Queued";
 
-      for (let
+      for (let i = 1; i <= 5; i++) {
+        const step = document.getElementById(`step${i}`);
+        step.classList.remove('active', 'completed');
+        if (i < stage) {
+          step.classList.add('completed');
+        } else if (i === stage) {
+          step.classList.add('active');
+        }
+      }
+
+      const progressPercent = Math.min(Math.max(((stage - 1) / 4) * 100, 0), 100);
+      document.getElementById('progressLine').style.width = `${progressPercent}%`;
+    }
+  </script>
+</body>
+</html>
