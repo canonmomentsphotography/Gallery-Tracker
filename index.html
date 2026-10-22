@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canon Moments - Client Status Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #121212;
+      --card-bg: #1a1a1a;
+      --border-color: #2e2e2e;
+      --accent-gold: #d4af37;
+      --accent-gold-light: #f3e5ab;
+      --text-main: #f5f5f5;
+      --text-muted: #a0a0a0;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Montserrat', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 850px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-family: var(--font-serif);
+      font-size: 2.8rem;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      color: var(--text-main);
+    }
+
+    .header p {
+      color: var(--accent-gold);
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+    }
+
+    .search-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 30px;
+      border-radius: 4px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .search-card label {
+      display: block;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 12px;
+    }
+
+    .search-input {
+      flex: 1;
+      background: #0f0f0f;
+      border: 1px solid var(--border-color);
+      padding: 14px 18px;
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      border-radius: 2px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent-gold);
+    }
+
+    .btn {
+      background: var(--accent-gold);
+      color: #000;
+      border: none;
+      padding: 14px 28px;
+      font-family: var(--font-sans);
+      font-weight: 500;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: background 0.3s;
+      border-radius: 2px;
+    }
+
+    .btn:hover {
+      background: var(--accent-gold-light);
+    }
+
+    .status-card {
+      display: none;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 40px;
+      border-radius: 4px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+      animation: fadeIn 0.4s ease-in-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .client-info-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 24px;
+      margin-bottom: 35px;
+    }
+
+    .client-info-header h2 {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: 400;
+    }
+
+    .client-info-header p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-top: 4px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .tracker-steps {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin: 40px 0;
+    }
+
+    .tracker-steps::before {
+      content: '';
+      position: absolute;
+      top: 15px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--border-color);
+      z-index: 1;
+    }
+
+    .tracker-progress-line {
+      position: absolute;
+      top: 15px;
+      left: 0;
+      height: 2px;
+      background: var(--accent-gold);
+      z-index: 2;
+      transition: width 0.5s ease;
+    }
+
+    .step-item {
+      position: relative;
+      z-index: 3;
+      text-align: center;
+      flex: 1;
+    }
+
+    .step-circle {
+      width: 32px;
+      height: 32px;
+      background: var(--bg-dark);
+      border: 2px solid var(--border-color);
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      transition: all 0.3s;
+    }
+
+    .step-item.active .step-circle {
+      border-color: var(--accent-gold);
+      background: var(--accent-gold);
+      color: #000;
+    }
+
+    .step-item.completed .step-circle {
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+    }
+
+    .step-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+    }
+
+    .step-item.active .step-title {
+      color: var(--accent-gold);
+      font-weight: 500;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      background: #141414;
+      padding: 24px;
+      border: 1px solid var(--border-color);
+      margin-top: 30px;
+    }
+
+    .detail-item h4 {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .detail-item p {
+      font-size: 0.95rem;
+      color: var(--text-main);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <p>Canon Moments Studio</p>
+      <h1>Editing & Status Portal</h1>
+    </div>
+
+    <div class="search-card">
+      <label for="searchInput">Enter Your Email Address</label>
+      <div class="search-box">
+        <input type="text" id="searchInput" class="search-input" placeholder="e.g. client@gmail.com">
+        <button class="btn" onclick="checkStatus()">Search Progress</button>
+      </div>
+      <p id="errorMsg" style="color: #e57373; font-size: 0.8rem; margin-top: 10px; display: none;">No active project found with that email address.</p>
+    </div>
+
+    <div id="statusCard" class="status-card">
+      <div class="client-info-header">
+        <div>
+          <h2 id="clientName">Client Name</h2>
+          <p id="sessionType">Portrait Session</p>
+        </div>
+        <div class="badge" id="currentStageBadge">In Editing</div>
+      </div>
+
+      <div class="tracker-steps">
+        <div class="tracker-progress-line" id="progressLine"></div>
+        <div class="step-item" id="step1">
+          <div class="step-circle">1</div>
+          <div class="step-title">Queued</div>
+        </div>
+        <div class="step-item" id="step2">
+          <div class="step-circle">2</div>
+          <div class="step-title">Selection</div>
+        </div>
+        <div class="step-item" id="step3">
+          <div class="step-circle">3</div>
+          <div class="step-title">Color Grade</div>
+        </div>
+        <div class="step-item" id="step4">
+          <div class="step-circle">4</div>
+          <div class="step-title">Retouching</div>
+        </div>
+        <div class="step-item" id="step5">
+          <div class="step-circle">5</div>
+          <div class="step-title">Gallery Delivery</div>
+        </div>
+      </div>
+
+      <div class="details-grid">
+        <div class="detail-item">
+          <h4>Estimated Delivery</h4>
+          <p id="estDelivery">Pending</p>
+        </div>
+        <div class="detail-item">
+          <h4>Studio Note</h4>
+          <p id="studioNote">Your project is currently in our editing queue.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Local Demo / Fallback Client List
+    let clientList = {
+      "client@gmail.com": {
+        name: "Sarah & Alex",
+        session: "Portrait Session",
+        stage: 3,
+        estDelivery: "November 12, 2026",
+        note: "Color grading complete. Fine retouching in progress."
+      }
+    };
+
+    function checkStatus() {
+      const query = document.getElementById('searchInput').value.trim().toLowerCase();
+      const errorMsg = document.getElementById('errorMsg');
+      const statusCard = document.getElementById('statusCard');
+
+      if (clientList[query]) {
+        errorMsg.style.display = "none";
+        renderOrderData(clientList[query]);
+        statusCard.style.display = "block";
+      } else if (query === "") {
+        // Show default preview if box is empty
+        renderOrderData(clientList["client@gmail.com"]);
+        statusCard.style.display = "block";
+      } else {
+        errorMsg.style.display = "block";
+        statusCard.style.display = "none";
+      }
+    }
+
+    function renderOrderData(data) {
+      document.getElementById('clientName').innerText = data.name;
+      document.getElementById('sessionType').innerText = data.session;
+      document.getElementById('estDelivery').innerText = data.estDelivery;
+      document.getElementById('studioNote').innerText = data.note;
+
+      updateTrackerVisuals(data.stage);
+    }
+
+    function updateTrackerVisuals(stage) {
+      const stageNames = ["Queued", "Photo Selection", "Color Grading", "Detail Retouching", "Ready for Delivery"];
+      document.getElementById('currentStageBadge').innerText = stageNames[stage - 1];
+
+      for (let i = 1; i <= 5; i++) {
+        const step = document.getElementById(`step${i}`);
+        step.classList.remove('active', 'completed');
+        if (i < stage) {
+          step.classList.add('completed');
+        } else if (i === stage) {
+          step.classList.add('active');
+        }
+      }
+
+      const progressPercent = ((stage - 1) / 4) * 100;
+      document.getElementById('progressLine').style.width = `${progressPercent}%`;
+    }
+  </script>
+</body>
+</html>
