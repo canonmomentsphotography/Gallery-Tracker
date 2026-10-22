@@ -259,6 +259,15 @@
       font-size: 0.95rem;
       color: var(--text-main);
     }
+
+    .loader {
+      display: none;
+      color: var(--accent-gold);
+      font-size: 0.85rem;
+      margin-top: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
   </style>
 </head>
 <body>
@@ -272,10 +281,11 @@
     <div class="search-card">
       <label for="searchInput">Enter Your Email Address</label>
       <div class="search-box">
-        <input type="text" id="searchInput" class="search-input" placeholder="e.g. client@gmail.com">
+        <input type="text" id="searchInput" class="search-input" placeholder="e.g. client@gmail.com" onkeypress="handleKeyPress(event)">
         <button class="btn" onclick="checkStatus()">Search Progress</button>
       </div>
-      <p id="errorMsg" style="color: #e57373; font-size: 0.8rem; margin-top: 10px; display: none;">No active project found with that email address.</p>
+      <div id="loader" class="loader">Fetching status...</div>
+      <p id="errorMsg" style="color: #e57373; font-size: 0.8rem; margin-top: 15px; display: none;"></p>
     </div>
 
     <div id="statusCard" class="status-card">
@@ -284,7 +294,7 @@
           <h2 id="clientName">Client Name</h2>
           <p id="sessionType">Portrait Session</p>
         </div>
-        <div class="badge" id="currentStageBadge">In Editing</div>
+        <div class="badge" id="currentStageBadge">In Progress</div>
       </div>
 
       <div class="tracker-steps">
@@ -314,73 +324,74 @@
       <div class="details-grid">
         <div class="detail-item">
           <h4>Estimated Delivery</h4>
-          <p id="estDelivery">Pending</p>
+          <p id="estDelivery">-</p>
         </div>
         <div class="detail-item">
           <h4>Studio Note</h4>
-          <p id="studioNote">Your project is currently in our editing queue.</p>
+          <p id="studioNote">-</p>
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    // Local Demo / Fallback Client List
-    let clientList = {
-      "client@gmail.com": {
-        name: "Sarah & Alex",
-        session: "Portrait Session",
-        stage: 3,
-        estDelivery: "November 12, 2026",
-        note: "Color grading complete. Fine retouching in progress."
-      }
-    };
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz4quOlhuJzmumOyEBU4HWccghdv4GniJRanNIxapwA6glHlH2h0pCLbg1-lsmQ5GWg/exec";
 
-    function checkStatus() {
-      const query = document.getElementById('searchInput').value.trim().toLowerCase();
+    function handleKeyPress(e) {
+      if (e.key === 'Enter') {
+        checkStatus();
+      }
+    }
+
+    async function checkStatus() {
+      const searchInput = document.getElementById('searchInput').value.trim().toLowerCase();
       const errorMsg = document.getElementById('errorMsg');
       const statusCard = document.getElementById('statusCard');
+      const loader = document.getElementById('loader');
 
-      if (clientList[query]) {
-        errorMsg.style.display = "none";
-        renderOrderData(clientList[query]);
-        statusCard.style.display = "block";
-      } else if (query === "") {
-        // Show default preview if box is empty
-        renderOrderData(clientList["client@gmail.com"]);
-        statusCard.style.display = "block";
-      } else {
+      if (!searchInput) {
+        errorMsg.innerText = "Please enter an email address.";
         errorMsg.style.display = "block";
         statusCard.style.display = "none";
+        return;
+      }
+
+      errorMsg.style.display = "none";
+      loader.style.display = "block";
+      statusCard.style.display = "none";
+
+      try {
+        const response = await fetch(`${GOOGLE_SCRIPT_URL}?email=${encodeURIComponent(searchInput)}`);
+        const data = await response.json();
+
+        loader.style.display = "none";
+
+        if (data.found) {
+          renderOrderData(data);
+          statusCard.style.display = "block";
+        } else {
+          errorMsg.innerText = "No active project found with that email address.";
+          errorMsg.style.display = "block";
+        }
+      } catch (err) {
+        console.error(err);
+        loader.style.display = "none";
+        errorMsg.innerText = "Error connecting to status server. Please try again later.";
+        errorMsg.style.display = "block";
       }
     }
 
     function renderOrderData(data) {
-      document.getElementById('clientName').innerText = data.name;
-      document.getElementById('sessionType').innerText = data.session;
-      document.getElementById('estDelivery').innerText = data.estDelivery;
-      document.getElementById('studioNote').innerText = data.note;
+      document.getElementById('clientName').innerText = data.name || "Client";
+      document.getElementById('sessionType').innerText = data.session || "Photography Session";
+      document.getElementById('estDelivery').innerText = data.estDelivery || "TBD";
+      document.getElementById('studioNote').innerText = data.note || "No specific notes at this time.";
 
-      updateTrackerVisuals(data.stage);
+      updateTrackerVisuals(data.stage || 1);
     }
 
     function updateTrackerVisuals(stage) {
       const stageNames = ["Queued", "Photo Selection", "Color Grading", "Detail Retouching", "Ready for Delivery"];
-      document.getElementById('currentStageBadge').innerText = stageNames[stage - 1];
+      document.getElementById('currentStageBadge').innerText = stageNames[stage - 1] || "Queued";
 
-      for (let i = 1; i <= 5; i++) {
-        const step = document.getElementById(`step${i}`);
-        step.classList.remove('active', 'completed');
-        if (i < stage) {
-          step.classList.add('completed');
-        } else if (i === stage) {
-          step.classList.add('active');
-        }
-      }
-
-      const progressPercent = ((stage - 1) / 4) * 100;
-      document.getElementById('progressLine').style.width = `${progressPercent}%`;
-    }
-  </script>
-</body>
-</html>
+      for (let
