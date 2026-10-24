@@ -30,7 +30,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 40px 20px;
+      padding: 20px 15px;
     }
 
     .container {
@@ -40,37 +40,37 @@
 
     .header {
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
     }
 
     .header h1 {
       font-family: var(--font-serif);
-      font-size: 2.8rem;
+      font-size: 2.2rem;
       font-weight: 400;
-      letter-spacing: 2px;
-      margin-bottom: 8px;
+      letter-spacing: 1.5px;
+      margin-bottom: 6px;
       color: var(--text-main);
     }
 
     .header p {
       color: var(--accent-gold);
       text-transform: uppercase;
-      font-size: 0.75rem;
-      letter-spacing: 3px;
+      font-size: 0.7rem;
+      letter-spacing: 2.5px;
     }
 
     .search-card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
-      padding: 30px;
+      padding: 20px;
       border-radius: 4px;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
     .search-card label {
       display: block;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 1.5px;
       color: var(--text-muted);
@@ -79,14 +79,15 @@
 
     .search-box {
       display: flex;
-      gap: 12px;
+      flex-direction: column;
+      gap: 10px;
     }
 
     .search-input {
-      flex: 1;
+      width: 100%;
       background: #0f0f0f;
       border: 1px solid var(--border-color);
-      padding: 14px 18px;
+      padding: 14px 16px;
       color: var(--text-main);
       font-family: var(--font-sans);
       font-size: 0.95rem;
@@ -100,15 +101,16 @@
     }
 
     .btn {
+      width: 100%;
       background: var(--accent-gold);
       color: #000;
       border: none;
-      padding: 14px 28px;
+      padding: 14px 20px;
       font-family: var(--font-sans);
-      font-weight: 500;
+      font-weight: 600;
       font-size: 0.8rem;
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 1.5px;
       cursor: pointer;
       transition: background 0.3s;
       border-radius: 2px;
@@ -122,7 +124,7 @@
       display: none;
       background: var(--card-bg);
       border: 1px solid var(--border-color);
-      padding: 40px;
+      padding: 25px 20px;
       border-radius: 4px;
       box-shadow: 0 15px 40px rgba(0,0,0,0.6);
       animation: fadeIn 0.4s ease-in-out forwards;
@@ -135,17 +137,19 @@
 
     .client-info-header {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
+      gap: 12px;
       align-items: flex-start;
       border-bottom: 1px solid var(--border-color);
-      padding-bottom: 24px;
-      margin-bottom: 35px;
+      padding-bottom: 20px;
+      margin-bottom: 25px;
     }
 
     .client-info-header h2 {
       font-family: var(--font-serif);
-      font-size: 2rem;
+      font-size: 1.75rem;
       font-weight: 400;
+      line-height: 1.2;
     }
 
     .client-info-header p {
@@ -156,56 +160,42 @@
 
     .badge {
       display: inline-block;
-      padding: 6px 14px;
+      padding: 6px 12px;
       border: 1px solid var(--accent-gold);
       color: var(--accent-gold);
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       text-transform: uppercase;
       letter-spacing: 1.5px;
     }
 
+    /* Tracker Steps Desktop & Responsive Layout */
     .tracker-steps {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
+      gap: 20px;
       position: relative;
-      margin: 40px 0;
-    }
-
-    .tracker-steps::before {
-      content: '';
-      position: absolute;
-      top: 15px;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: var(--border-color);
-      z-index: 1;
+      margin: 25px 0;
     }
 
     .tracker-progress-line {
-      position: absolute;
-      top: 15px;
-      left: 0;
-      height: 2px;
-      background: var(--accent-gold);
-      z-index: 2;
-      transition: width 0.5s ease;
+      display: none;
     }
 
     .step-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
       position: relative;
       z-index: 3;
-      text-align: center;
-      flex: 1;
     }
 
     .step-circle {
       width: 32px;
       height: 32px;
+      min-width: 32px;
       background: var(--bg-dark);
       border: 2px solid var(--border-color);
       border-radius: 50%;
-      margin: 0 auto 12px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -226,7 +216,7 @@
     }
 
     .step-title {
-      font-size: 0.7rem;
+      font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: var(--text-muted);
@@ -234,17 +224,17 @@
 
     .step-item.active .step-title {
       color: var(--accent-gold);
-      font-weight: 500;
+      font-weight: 600;
     }
 
     .details-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
+      grid-template-columns: 1fr;
+      gap: 15px;
       background: #141414;
-      padding: 24px;
+      padding: 20px;
       border: 1px solid var(--border-color);
-      margin-top: 30px;
+      margin-top: 25px;
     }
 
     .detail-item h4 {
@@ -256,17 +246,117 @@
     }
 
     .detail-item p {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: var(--text-main);
+      line-height: 1.4;
     }
 
     .loader {
       display: none;
       color: var(--accent-gold);
-      font-size: 0.85rem;
-      margin-top: 15px;
+      font-size: 0.8rem;
+      margin-top: 12px;
       text-transform: uppercase;
       letter-spacing: 1.5px;
+      text-align: center;
+    }
+
+    /* Tablet and Desktop Enhancements */
+    @media (min-width: 601px) {
+      body {
+        padding: 40px 20px;
+      }
+
+      .header h1 {
+        font-size: 2.8rem;
+      }
+
+      .header p {
+        font-size: 0.75rem;
+      }
+
+      .search-card {
+        padding: 30px;
+      }
+
+      .search-box {
+        flex-direction: row;
+        gap: 12px;
+      }
+
+      .btn {
+        width: auto;
+        padding: 14px 28px;
+      }
+
+      .status-card {
+        padding: 40px;
+      }
+
+      .client-info-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      .client-info-header h2 {
+        font-size: 2rem;
+      }
+
+      .badge {
+        font-size: 0.7rem;
+      }
+
+      /* Horizontal Tracker Layout for Desktop */
+      .tracker-steps {
+        flex-direction: row;
+        justify-content: space-between;
+        margin: 40px 0;
+      }
+
+      .tracker-steps::before {
+        content: '';
+        position: absolute;
+        top: 15px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--border-color);
+        z-index: 1;
+      }
+
+      .tracker-progress-line {
+        display: block;
+        position: absolute;
+        top: 15px;
+        left: 0;
+        height: 2px;
+        background: var(--accent-gold);
+        z-index: 2;
+        transition: width 0.5s ease;
+      }
+
+      .step-item {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        flex: 1;
+        gap: 0;
+      }
+
+      .step-circle {
+        margin: 0 auto 12px;
+      }
+
+      .step-title {
+        font-size: 0.7rem;
+      }
+
+      .details-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        padding: 24px;
+      }
     }
   </style>
 </head>
@@ -279,13 +369,13 @@
     </div>
 
     <div class="search-card">
-      <label for="searchInput">Enter The Email Address Used While Booking</label>
+      <label for="searchInput">Enter Your Email Address</label>
       <div class="search-box">
-        <input type="text" id="searchInput" class="search-input" placeholder="e.g. youlookamazing@gmail.com" onkeypress="handleKeyPress(event)">
+        <input type="text" id="searchInput" class="search-input" placeholder="e.g. test@gmail.com" onkeypress="handleKeyPress(event)">
         <button class="btn" onclick="checkStatus()">Search Progress</button>
       </div>
       <div id="loader" class="loader">Fetching status...</div>
-      <p id="errorMsg" style="color: #e57373; font-size: 0.8rem; margin-top: 15px; display: none;"></p>
+      <p id="errorMsg" style="color: #e57373; font-size: 0.8rem; margin-top: 12px; text-align: center; display: none;"></p>
     </div>
 
     <div id="statusCard" class="status-card">
