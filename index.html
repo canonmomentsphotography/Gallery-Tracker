@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Canon Moments - Client Status Portal</title>
+  <title>Canon Moments - Client Gallery Status Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -168,7 +168,7 @@
       letter-spacing: 1.5px;
     }
 
-    /* Tracker Steps Desktop & Responsive Layout */
+    /* Tracker Steps Mobile Layout */
     .tracker-steps {
       display: flex;
       flex-direction: column;
@@ -193,6 +193,7 @@
       width: 32px;
       height: 32px;
       min-width: 32px;
+      min-height: 32px;
       background: var(--bg-dark);
       border: 2px solid var(--border-color);
       border-radius: 50%;
@@ -201,7 +202,9 @@
       justify-content: center;
       font-size: 0.75rem;
       color: var(--text-muted);
+      line-height: 1;
       transition: all 0.3s;
+      flex-shrink: 0;
     }
 
     .step-item.active .step-circle {
@@ -221,6 +224,7 @@
       text-transform: uppercase;
       letter-spacing: 1px;
       color: var(--text-muted);
+      line-height: 1.2;
     }
 
     .step-item.active .step-title {
@@ -315,6 +319,7 @@
       .tracker-steps {
         flex-direction: row;
         justify-content: space-between;
+        align-items: flex-start;
         margin: 40px 0;
       }
 
@@ -342,7 +347,8 @@
 
       .step-item {
         flex-direction: column;
-        justify-content: center;
+        align-items: center;
+        justify-content: flex-start;
         text-align: center;
         flex: 1;
         gap: 0;
