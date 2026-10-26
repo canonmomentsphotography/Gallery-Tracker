@@ -213,6 +213,7 @@
     .step-item.completed .step-circle {
       border-color: var(--accent-gold);
       color: var(--accent-gold);
+      background: rgba(212, 175, 55, 0.15);
     }
 
     .step-title {
@@ -225,6 +226,10 @@
     .step-item.active .step-title {
       color: var(--accent-gold);
       font-weight: 600;
+    }
+
+    .step-item.completed .step-title {
+      color: var(--text-main);
     }
 
     .details-grid {
@@ -307,7 +312,6 @@
         font-size: 0.7rem;
       }
 
-      /* Horizontal Tracker Layout for Desktop */
       .tracker-steps {
         flex-direction: row;
         justify-content: space-between;
@@ -409,9 +413,9 @@
           <div class="step-circle">5</div>
           <div class="step-title">Photos Uploading</div>
         </div>
-      <div class="step-item" id="step6">
+        <div class="step-item" id="step6">
           <div class="step-circle">6</div>
-          <div class="step-title">Gallery Dellivery</div>
+          <div class="step-title">Gallery Delivery</div>
         </div>
       </div>
 
@@ -491,21 +495,26 @@
     }
 
     function updateTrackerVisuals(stage) {
-      const stageNames = ["Queued", "Photo Selection", "Color Grading", "Detail Retouching", "Uploading Photos" , "Ready for Delivery"];
+      const stageNames = ["Queued", "Photo Selection", "Color Grading", "Detail Retouching", "Uploading Photos", "Gallery Delivered"];
       document.getElementById('currentStageBadge').innerText = stageNames[stage - 1] || "Queued";
 
-      for (let i = 1; i <= 5; i++) {
+      for (let i = 1; i <= 6; i++) {
         const step = document.getElementById(`step${i}`);
-        step.classList.remove('active', 'completed');
-        if (i < stage) {
-          step.classList.add('completed');
-        } else if (i === stage) {
-          step.classList.add('active');
+        if (step) {
+          step.classList.remove('active', 'completed');
+          if (i < stage) {
+            step.classList.add('completed');
+          } else if (i === stage) {
+            step.classList.add('active');
+          }
         }
       }
 
-      const progressPercent = Math.min(Math.max(((stage - 1) / 4) * 100, 0), 100);
-      document.getElementById('progressLine').style.width = `${progressPercent}%`;
+      const progressPercent = Math.min(Math.max(((stage - 1) / 5) * 100, 0), 100);
+      const progressLine = document.getElementById('progressLine');
+      if (progressLine) {
+        progressLine.style.width = `${progressPercent}%`;
+      }
     }
   </script>
 </body>
